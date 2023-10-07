@@ -1,0 +1,34 @@
+body {
+    font-family: Arial, Arial, Helvetica, sans-serif;
+    text-align: center;
+    color: whitesmoke;
+    background: url("./Inquisition1.jpg");
+    background-size: cover;
+}
+
+#board2 {
+    background: black;
+}
+
+#board3 {
+    width: 750px;
+    height: 750px;
+    margin: 0 auto;
+    background: url("./Board_DnDodge.png");
+    background-size: cover;
+    border: 3px solid black;
+    border-radius: 15px;
+}
+
+#board {
+    background: url("./Board_DnDodge.png");
+    background-size: cover;
+    border: 3px solid black;
+    border-radius: 15px;
+}
+
+#tally {
+    font-family: Arial, Arial, Helvetica, sans-serif;
+    text-align: center;
+    color: lightgoldenrodyellow;
+}
