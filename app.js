@@ -264,6 +264,7 @@ function pauser(e) {
 //Provide Default Info
 function defaultDesc() {
     let def = "Click on a Pokemon for details";
+    def += "\nPause the simulation with the SPACEBAR";
     def += "\n-------------------------------------------------------";
     def += "\nSimulation ends when one species remains";
     def += "\nor no pokemon can deal more than 1 damage";
