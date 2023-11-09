@@ -426,7 +426,7 @@ async function update() {
                     eventMsgs += 1;
                     let itemz = document.createElement("div");
                     itemz.id = "m" + eventMsgs.toString();
-                    itemz.innerText = listed[monsters[i].species]["name"] + " dies!";
+                    itemz.innerText = listed[monsters[i].species]["name"] + " faints!";
                     itemz.classList.add("item-ko");
                     document.getElementById("item-list").prepend(itemz);
 
