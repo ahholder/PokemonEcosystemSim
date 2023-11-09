@@ -8,9 +8,16 @@
       <script src="app.js"></script>
   </head>
   <body>
-      <h1>D & Dodge!</h1>
-      <h2 id="score">Score: 0</h2>
-      <canvas id="board"></canvas>
-      <h2 id="tally">Current Enemies: 0 || Time Played: 0s</h2>
+      <div id="content-box">
+          <div id="info-box">
+              <div id="desc-box" style="position:relative; z-index: 5"></div>
+              <div id="item-list" style="position: relative; z-index: 4"></div>
+          </div>
+          <div id="overlay" style="position: relative; z-index: 2; user-select: none;">
+              <canvas id="board2" style="position: absolute; z-index: 1; left: 0; top: 0; user-select: none;"></canvas>
+              <canvas id="board" style="position: absolute; z-index: 3; left: 0; top: 0; user-select: none;"></canvas>
+          </div>
+      </div>
+      <div id="time-keeper">Time Elapsed: 0s</div>
   </body>
 </html>

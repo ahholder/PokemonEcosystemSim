@@ -1,34 +1,326 @@
 body {
     font-family: Arial, Arial, Helvetica, sans-serif;
     text-align: center;
-    color: whitesmoke;
-    background: url("./Inquisition1.jpg");
+    color: black;
+    background-color: black;
+    background: url("./FogCube.png");
+    fill-opacity: 0.5;
     background-size: cover;
-}
-
-#board2 {
-    background: black;
-}
-
-#board3 {
-    width: 750px;
-    height: 750px;
-    margin: 0 auto;
-    background: url("./Board_DnDodge.png");
-    background-size: cover;
-    border: 3px solid black;
-    border-radius: 15px;
 }
 
 #board {
-    background: url("./Board_DnDodge.png");
     background-size: cover;
-    border: 3px solid black;
-    border-radius: 15px;
+    border: 1px solid black;
+    border-radius: 1px;
+}
+
+#board2 {
+    background: url("./Board_DnDodge.png");
+    /*background: url("./Inquisition1.jpg") no-repeat;*/
+    background-size: cover;
+    border: 1px solid black;
+    border-radius: 1px;
+}
+
+#overlay {
+    position: relative;
 }
 
 #tally {
     font-family: Arial, Arial, Helvetica, sans-serif;
     text-align: center;
     color: lightgoldenrodyellow;
+}
+
+#content-box {
+    width: 1173px;
+    height: 758px;
+    border: 5px solid black;
+    border-radius: 10px;
+    /*background-color: white;*/
+    background: url("./backsplash.jpg") no-repeat;
+    background-size: cover;
+    display: flex;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+#info-box {
+    width: 400px;
+    height: 758px;
+    padding-right: 15px;
+    /*margin-right: 10px;*/
+    /*background: url("./Inquisition1.jpg") no-repeat;*/
+    /*background-size: cover;*/
+    text-align: center;
+    border-right: 3px solid black;
+}
+
+#item-list {
+    width: 410px;
+    height: 486px;
+    /*background-color: goldenrodyellow;*/
+    font-size: 18px;
+    overflow-y: auto;
+    margin-top: 4px;
+    /*margin-right: 3px;*/
+}
+
+#desc-box {
+    width: 400px;
+    height: 250px;
+    background-color: lightgray;
+    border: 2px solid black;
+    border-radius: 10px;
+    margin: 0 auto;
+    margin-top: 10px;
+    padding: 2px;
+    font-size: 18px;
+    overflow-y: auto;
+    margin-left: 4px;
+    color: black;
+    text-align: center;
+    /*margin-right: 10px;*/
+}
+
+#time-keeper {
+    padding-top: 10px;
+    color: white;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.test-img {
+    width: 25px;
+    height: 25px;
+    z-index: 5;
+    display: flex;
+    /*background: black;*/
+    position: absolute;
+}
+
+.item-name {
+    border: 1px solid black;
+    background-color: white;
+    border-radius: 10px;
+    margin: 5px;
+    padding: 5px;
+}
+
+.item-dmg {
+    border: 1px solid black;
+    background-color: red;
+    color: white;
+    border-radius: 10px;
+    margin: 5px;
+    padding: 5px;
+    font-weight: 600;
+}
+
+.item-opening {
+    border: 1px solid black;
+    background-color: orangered;
+    color: black;
+    border-radius: 10px;
+    margin: 5px;
+    padding: 5px;
+    font-weight: 600;
+}
+
+.item-counted {
+    border: 1px solid black;
+    background-color: deepskyblue;
+    color: palegoldenrod;
+    border-radius: 10px;
+    margin: 5px;
+    padding: 5px;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.item-impossible {
+    border: 1px solid black;
+    background-color: greenyellow;
+    color: darkred;
+    border-radius: 10px;
+    margin: 5px;
+    padding: 5px;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.item-ko {
+    border: 1px solid black;
+    background-color: black;
+    color: red;
+    border-radius: 10px;
+    margin: 5px;
+    padding: 5px;
+    font-weight: 600;
+}
+
+.item-spawn {
+    border: 1px solid black;
+    background-color: lightyellow;
+    color: deepskyblue;
+    border-radius: 10px;
+    margin: 5px;
+    padding: 5px;
+    font-weight: 600;
+}
+
+.item-pause {
+    border: 1px solid black;
+    background-color: darkgray;
+    color: black;
+    border-radius: 10px;
+    margin: 5px;
+    padding: 5px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.item-loadin {
+    border: 1px solid black;
+    background-color: darkgray;
+    color: white;
+    border-radius: 10px;
+    margin: 5px;
+    padding: 5px;
+    font-style: italic;
+    font-weight: 600;
+}
+
+.item-xp {
+    border: 1px solid black;
+    background-color: darkgreen;
+    color: gold;
+    border-radius: 10px;
+    margin: 5px;
+    padding: 5px;
+    font-weight: 600;
+}
+
+.item-gg {
+    border: 1px solid black;
+    background-color: gold;
+    color: white;
+    border-radius: 10px;
+    margin: 5px;
+    padding: 5px;
+    font-size: 36px;
+    font-weight: 600;
+}
+
+#info-img {
+    width: 100px;
+    height: 100px;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-top: 20px;
+    background-color: white;
+    float: left;
+}
+
+#info-types {
+    margin-top: 10px;
+}
+
+.type-box {
+    padding: 3px;
+    margin: 5px;
+    border: 1px solid white;
+    border-radius: 10px;
+}
+
+/*Typings*/
+
+.fire {
+    background-color: orange;
+    color: white;
+}
+
+.normal {
+    background-color: beige;
+    color: black;
+}
+
+.grass {
+    background-color: green;
+    color: white;
+}
+
+.water {
+    background-color: blue;
+    color: white;
+}
+
+.ice {
+    background-color: lightblue;
+    color: black;
+}
+
+.electric {
+    background-color: gold;
+    color: black;
+}
+
+.fighting {
+    background-color: darkred;
+    color: white;
+}
+
+.flying {
+    background-color: skyblue;
+    color: black;
+}
+
+.bug {
+    background-color: yellowgreen;
+    color: white;
+}
+
+.ghost {
+    background-color: purple;
+    color: white;
+}
+
+.rock {
+    background-color: sienna;
+    color: white;
+}
+
+.ground {
+    background-color: burlywood;
+    color: black;
+}
+
+.steel {
+    background-color: silver;
+    color: black;
+}
+
+.dark {
+    background-color: darkgray;
+    color: white;
+}
+
+.dragon {
+    background-color: teal;
+    color: white;
+}
+
+.psychic {
+    background-color: palevioletred;
+    color: white;
+}
+
+.poison {
+    background-color: darkviolet;
+    color: white;
+}
+
+.fairy {
+    background-color: pink;
+    color: black;
 }
