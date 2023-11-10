@@ -4,6 +4,7 @@
 //-Added Speed Change Options
 //-Increased timeout duration and explained it in general info
 //-Increased interval for checking indefinite matches
+//-Dynamically adjusted info box to reflect changes to selected pokemon
 
 
 //Independent Variables Variables
