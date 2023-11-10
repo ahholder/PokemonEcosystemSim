@@ -1,4 +1,4 @@
-//Changes on 11/10/2023
+//Changes on 11/10/2023:
 //-Replaced periodic info message with permanent tracker
 //-Adjusted XP and HP thresholds
 //-Added Speed Change Options
@@ -24,9 +24,10 @@ let eventMsgs = 0; //count of displayed messages
 let frameTally = 0; //number of elapsed frames
 let gameOver = false; //game state of active or finished
 let gamePaused = false; //game state of paused or unpaused
-let maxGspeed = 0.5;
-let minGspeed = 0.1;
-let gSpeed = 0.3;
+let maxGspeed = 0.5; //Max Sim Speed
+let minGspeed = 0.1; //Min Sim Speed
+let defGspeed = 0.3; //Default Sim Speed
+let gSpeed = 0.3; //Current Sim Speed
 
 //Board Variables
 let tileSize = 25;
@@ -263,7 +264,7 @@ function pauser(e) {
     }
 
     //Pause Simulation
-    if (e.code == "Space" || e.code == "KeyZ") {
+    if (e.code == "Space") {
         if (gamePaused == true) {
             gamePaused = false;
 
@@ -287,35 +288,64 @@ function pauser(e) {
 
     //Increase Speed
     if (e.code == "KeyW") {
-        gSpeed += 0.1;
+        gSpeed = parseFloat(gSpeed) + 0.1;
         if (gSpeed > maxGspeed) {
             gSpeed = maxGspeed;
-        } else {
-            eventMsgs += 1;
-            let itemz = document.createElement("div");
-            itemz.id = "m" + eventMsgs.toString();
-            itemz.innerText = "Simulation Speed +Increased+";
-            itemz.classList.add("item-counted");
-            document.getElementById("item-list").prepend(itemz);
         }
-
+        let speedUp = parseFloat(gSpeed).toFixed(1);
+        gSpeed = speedUp;
+        displaySimSpeed();
     }
 
     //Decrease Speed
     if (e.code == "KeyQ") {
-        gSpeed -= 0.1;
+        gSpeed = parseFloat(gSpeed) - 0.1;
         if (gSpeed < minGspeed) {
             gSpeed = minGspeed;
-        } else {
-            eventMsgs += 1;
-            let itemz = document.createElement("div");
-            itemz.id = "m" + eventMsgs.toString();
-            itemz.innerText = "Simulation Speed -Decreased-";
-            itemz.classList.add("item-counted");
-            document.getElementById("item-list").prepend(itemz);
         }
-
+        let speedDown = gSpeed.toFixed(1);
+        gSpeed = speedDown;
+        displaySimSpeed();
     }
+
+    //TotalMon Test
+    /*if (e.code == "KeyZ") {
+        for (let i = 0; i < totalMons + 1; i++) {
+            if (i != totalMons) {
+                monsters[i].hp = 1;
+            }
+        }
+        monsters[totalMons].hp = mHP;
+        selected = totalMons;
+        displayInfo(totalMons);
+    }*/
+}
+
+//Displays a message with current simulation speed
+function displaySimSpeed() {
+    let speedMsg = "Simulation Speed: ";
+    //Determine Speed Output
+    if (gSpeed == defGspeed) {
+        speedMsg += "Normal";
+    } else if (gSpeed == maxGspeed) {
+        speedMsg += "Very Fast (++)";
+    } else if (gSpeed == minGspeed) {
+        speedMsg += "Very Slow (--)";
+    } else if (gSpeed > defGspeed) {
+        speedMsg += "Fast (+)";
+    } else if (gSpeed < defGspeed) {
+        speedMsg += "Slow (-)";
+    } else {
+        speedMsg += "Unknown";
+    }
+
+    //Display Speed as Message
+    eventMsgs += 1;
+    let itemz = document.createElement("div");
+    itemz.id = "m" + eventMsgs.toString();
+    itemz.innerText = speedMsg;
+    itemz.classList.add("item-counted");
+    document.getElementById("item-list").prepend(itemz);
 }
 
 //Provide Default Info
@@ -494,6 +524,11 @@ async function update() {
                     let maxDiv = document.getElementById(totalMons);
 
                     monsters[i] = monsters[totalMons];
+
+                    //Fixes selection bug for having #totalMons selected
+                    if (selected == totalMons) {
+                        selected = i;
+                    }
 
                     maxDiv.id = oldDiv.id;
                     oldDiv.remove();
