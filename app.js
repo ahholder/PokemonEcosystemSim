@@ -3,7 +3,7 @@ const listCount = 151; //Number of potential species in pool
 let invulCount = 60; //default invul timer
 let initialMons = 6; //Number of pokemon spawned (typically squared), optimal performance value = 6, all original pokemon value = 13
 let squareMons = true; //Ensures initial mons are squared at startup
-let matchTimeout = 5; //When match times-out from being unresolved, listed in minutes
+let matchTimeout = 10; //When match times-out from being unresolved, listed in minutes
 
 //Miscellaneous Variables
 var listed = {}; // {"name" : "string", "img" : url, "type" : {"type 1", "type 2"}, "description" : "string", "speed" : int}
@@ -15,6 +15,9 @@ let eventMsgs = 0; //count of displayed messages
 let frameTally = 0; //number of elapsed frames
 let gameOver = false; //game state of active or finished
 let gamePaused = false; //game state of paused or unpaused
+let maxGspeed = 0.5;
+let minGspeed = 0.1;
+let gSpeed = 0.3;
 
 //Board Variables
 let tileSize = 25;
@@ -31,12 +34,12 @@ let overlay;
 
 //Creature Variables
 let mSize = 25;
-let mHP = 4;
+let mHP = 8;
 let mMoves = 5;
-let mXP = 3;
+let mXP = 7;
 let mDMG = 2;
 let mRXP = 1;
-let mRinterval = 600; //Timer for update message gain
+let mRinterval = 100; //Timer for unwinnable check (formerly update message at default = 600)
 let xpRinterval = 900; //Timer for xp gain
 var monsters = {}; //{"species": int, "hp": int, "xp": int, "x": real, "y": real, "up": int, "right": int, "alive": bool, "invul": int}
 
@@ -180,7 +183,7 @@ function createMon(mx, my, mid) {
     }
 }
 
-//Added to check on EventListener Options -- New Code
+//Provides on-click info for a pokemon
 function getInfo() {
     let box = document.getElementById("desc-box");
     if (this.id == "board" || this.id == "item-list" || this.id == "overlay" || this.id > totalMons || this.id < 0 || this.id == null || monsters[this.id].alive == false) {
@@ -190,10 +193,23 @@ function getInfo() {
         return;
     }
 
+    displayInfo(this.id);
+    selected = this.id;
+}
+
+//Updates the description box
+function displayInfo(num) {
+    let box = document.getElementById("desc-box");
+    if (num < 0) {
+        box.style["font-size"] = "18px";
+        box.innerText = defaultDesc();
+        selected = -1;
+        return;
+    }
 
     box.style["font-size"] = "36px";
-    let mon = monsters[this.id];
-    let subject = listed[monsters[parseInt(this.id)]["species"]];
+    let mon = monsters[num];
+    let subject = listed[monsters[parseInt(num)]["species"]];
     let monName = subject["name"].toUpperCase();
     box.innerText = monName + ":";
     let monTyping = "";
@@ -207,8 +223,6 @@ function getInfo() {
     box.innerText += "\n\n" + monTyping;
     box.innerText += "\nHP: " + mon.hp + " / " + mHP;
     box.innerText += "\nXP: " + mon.xp + " / " + mXP;
-
-    selected = this.id;
 }
 
 //Original API list gatherer and populator -- PokeDex Code, Updated
@@ -233,11 +247,13 @@ async function getItem(num) {
     listed[num] = { "name": name, "img": image, "types": types, "desc": longDesc, "spd": speed }
 }
 
-//Allows the game to be paused -- D&Dodge code, Updated
+//Allows the simulation to be paused and its speed adjusted
 function pauser(e) {
     if (gameOver) {
         return;
     }
+
+    //Pause Simulation
     if (e.code == "Space" || e.code == "KeyZ") {
         if (gamePaused == true) {
             gamePaused = false;
@@ -259,15 +275,50 @@ function pauser(e) {
             document.getElementById("item-list").prepend(itemz);
         }
     }
+
+    //Increase Speed
+    if (e.code == "KeyW") {
+        gSpeed += 0.1;
+        if (gSpeed > maxGspeed) {
+            gSpeed = maxGspeed;
+        } else {
+            eventMsgs += 1;
+            let itemz = document.createElement("div");
+            itemz.id = "m" + eventMsgs.toString();
+            itemz.innerText = "Simulation Speed +Increased+";
+            itemz.classList.add("item-counted");
+            document.getElementById("item-list").prepend(itemz);
+        }
+
+    }
+
+    //Decrease Speed
+    if (e.code == "KeyQ") {
+        gSpeed -= 0.1;
+        if (gSpeed < minGspeed) {
+            gSpeed = minGspeed;
+        } else {
+            eventMsgs += 1;
+            let itemz = document.createElement("div");
+            itemz.id = "m" + eventMsgs.toString();
+            itemz.innerText = "Simulation Speed -Decreased-";
+            itemz.classList.add("item-counted");
+            document.getElementById("item-list").prepend(itemz);
+        }
+
+    }
 }
 
 //Provide Default Info
 function defaultDesc() {
     let def = "Click on a Pokemon for details";
     def += "\nPause the simulation with the SPACEBAR";
+    def += "\nIncrease simulation speed with W";
+    def += "\nDecrease Simulation speed with Q";
     def += "\n-------------------------------------------------------";
-    def += "\nSimulation ends when one species remains";
-    def += "\nor no pokemon can deal more than 1 damage";
+    def += "\nSimulation ends when one species remains,";
+    def += "\nno pokemon can deal more than 1 damage,";
+    def += "\nor " + matchTimeout + " minutes pass with no winner.";
     def += "\n-------------------------------------------------------";
     def += "\nPokemon ignore their own species.";
     def += "\nXP is gained dealing damage and over time.";
@@ -398,8 +449,8 @@ async function update() {
                 }
 
                 //Movement
-                mainEnemy.x += mainEnemy["right"] * 0.3;
-                mainEnemy.y += mainEnemy["up"] * 0.3;
+                mainEnemy.x += mainEnemy["right"] * gSpeed;
+                mainEnemy.y += mainEnemy["up"] * gSpeed;
 
             }
 
@@ -492,6 +543,7 @@ async function update() {
         if (checkEnding == true && frameTally > 100) {
             endGame(checkedWinner);
         }
+        displayInfo(selected);
     }
 }
 
@@ -644,11 +696,21 @@ function endGame(winner) {
 
 //Visually shows time elapsed
 function timeKeeper() {
+    //Timer
     let timer = document.getElementById("time-keeper");
     let timez = (frameTally / 60).toFixed(2);
     timer.innerText = "Time Elapsed: " + timez + "s";
     if (gameOver == true) {
         timer.style["color"] = "red";
+    }
+    //Population Breakdown
+    let lead = speciesLead();
+    let informer = document.getElementById("mon-counter");
+    let fullMsg = "Total Pokemon: " + (totalMons + 1) + " | Total Species: " + speciesTally() + " | Dominant Species: ";
+    fullMsg += listed[lead["num"]]["name"] + " (" + lead["counted"] + " alive)";
+    informer.innerText = fullMsg;
+    if (gameOver == true) {
+        informer.style["color"] = "goldenrod";
     }
 }
 
@@ -658,12 +720,14 @@ async function periodicInfoMsg() {
     let lead = speciesLead();
     let fullMsg = "-" + timez + " seconds-\n\nTotal Pokemon: " + (totalMons + 1) + "\nTotal Species: " + speciesTally();
     fullMsg += "\nLead: " + listed[lead["num"]]["name"] + " (" + lead["counted"] + " alive)";
-    eventMsgs += 1;
+
+    /*eventMsgs += 1;
     let itemz = document.createElement("div");
     itemz.id = "m" + eventMsgs.toString();
     itemz.innerText = fullMsg;
     itemz.classList.add("item-counted");
-    document.getElementById("item-list").prepend(itemz);
+    document.getElementById("item-list").prepend(itemz);*/
+
     let decider = await unwinnable();
     if (decider == true) {
         endGame(-1);
