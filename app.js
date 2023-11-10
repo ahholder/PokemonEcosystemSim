@@ -1,3 +1,11 @@
+//Changes on 11/10/2023
+//-Replaced periodic info message with permanent tracker
+//-Adjusted XP and HP thresholds
+//-Added Speed Change Options
+//-Increased timeout duration and explained it in general info
+//-Increased interval for checking indefinite matches
+
+
 //Independent Variables Variables
 const listCount = 151; //Number of potential species in pool
 let invulCount = 60; //default invul timer
@@ -39,7 +47,7 @@ let mMoves = 5;
 let mXP = 7;
 let mDMG = 2;
 let mRXP = 1;
-let mRinterval = 100; //Timer for unwinnable check (formerly update message at default = 600)
+let mRinterval = 300; //Timer for unwinnable check (formerly update message at default = 600)
 let xpRinterval = 900; //Timer for xp gain
 var monsters = {}; //{"species": int, "hp": int, "xp": int, "x": real, "y": real, "up": int, "right": int, "alive": bool, "invul": int}
 
